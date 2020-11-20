@@ -1,0 +1,7 @@
+#!/bin/env bash
+
+set -e
+
+export RESTIC_PASSWORD="$(pass backup)"
+
+backup-home prune "" rclone:nas:/BackupsEnc/workstations/$(hostname -s | tr '[:upper:]' '[:lower:]')
