@@ -16,14 +16,14 @@ then
     else
         useradd -m $instuser
         passwd $instuser
-
-        echo 'alias update-config=bash $HOME/.cfg-update/init.sh' >> /home/$instuser/.bashrc
     fi
 
     usermod -aG wheel $instuser
 
     echo "Now switch to your user(sudo -u $instuser bash)";
-    echo "and type 'update-config'"
+    echo "and run installation again'"
+    echo "curl -Lks https://raw.githubusercontent.com/ewok/.cfg/master/.cfg-update/init.sh > init.sh"
+    echo "bash init.sh"
     exit 1;
 fi
 
