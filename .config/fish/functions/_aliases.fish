@@ -1,8 +1,3 @@
-
-function tailf
-    tail -f $argv
-end
-
 function exit
    sync
    sync
@@ -15,7 +10,7 @@ function git
     LANGUAGE=en_US.UTF-8 command git $argv
 end
 
-function config
+function config --wraps git
  LANGUAGE=en_US.UTF-8 command git --git-dir=$HOME/.cfg/ --work-tree=$HOME $argv
 end
 

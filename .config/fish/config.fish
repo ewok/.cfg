@@ -61,6 +61,8 @@ if status is-interactive
   abbr -a mproc "smem -t -k -c pss -P"
   abbr -a egrep "egrep --color=always"
   abbr -a j jrnl
+  abbr -a c config
+  abbr -a cls config ls-tree --name-only HEAD
 
   bind \cw backward-kill-word
 
