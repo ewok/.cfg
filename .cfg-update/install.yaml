@@ -19,6 +19,7 @@
         state: present
       tags:
         - pre
+      become: True
 
   tasks:
     - include_role:
