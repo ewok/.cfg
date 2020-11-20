@@ -336,6 +336,11 @@ vmap <expr>  MY  ':Yankitute/\(' . @/ . '\)/\1/g<LEFT><LEFT>'
 
 " Replace without yanking
 vnoremap p :<C-U>let @p = @+<CR>gvp:let @+ = @p<CR>
+
+" Permanent buffer
+vmap <leader>yy :w! ~/.vbuf<CR>
+nmap <leader>yy :.w! ~/.vbuf<CR>
+nmap <leader>yp :r ~/.vbuf<CR>
 " }}}
 " Some vim tunings {{{
 nnoremap Y y$
