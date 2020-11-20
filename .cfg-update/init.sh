@@ -6,6 +6,7 @@ if [ "$(whoami)" == "root" ]
 then
     pacman -Sy --noconfirm
     pacman -S --needed --noconfirm git sudo curl
+    pacman-key --init
 
     mkdir -p /etc/sudoers.d
     echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/10-installer
@@ -20,8 +21,9 @@ then
 
     usermod -aG wheel $instuser
 
-    echo "Now switch to your user(sudo -u $instuser bash)";
-    echo "and run installation again'"
+    echo "Now switch to your user, and run installation again:"
+    echo
+    echo "sudo -u $instuser bash"
     echo "curl -Lks https://raw.githubusercontent.com/ewok/.cfg/master/.cfg-update/init.sh > init.sh"
     echo "bash init.sh"
     exit 1;

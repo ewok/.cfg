@@ -3,16 +3,6 @@
 - hosts: localhost
   pre_tasks:
 
-    - name: Add some repos via git
-      git:
-        repo: "{{ item.repo }}"
-        dest: "{{ item.dest }}"
-      loop:
-          - { repo: "https://github.com/kewlfft/ansible-aur.git", dest: "modules/aur" }
-          - { repo: "https://github.com/ewok/ansible-pacman-key.git", dest: "modules/pacman_key" }
-      tags:
-        - pre
-
   tasks:
     - include_role:
         name: base
