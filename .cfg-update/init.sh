@@ -58,4 +58,4 @@ config config status.showUntrackedFiles no
 sudo pacman -S --need --noconfirm python-virtualenv
 
 cd $HOME/.cfg-update
-bash install.sh
+bash install.sh -t pre,base,editor

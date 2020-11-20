@@ -142,5 +142,5 @@
 
 - shell: cd /usr/share/git/credential/gnome-keyring && make
   changed_when: False
+  ignore_errors: True
   become: True
-  changed_when: False

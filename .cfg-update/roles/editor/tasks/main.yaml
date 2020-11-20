@@ -6,7 +6,7 @@
     use: yay
   loop: [
       "ctags", "global", "the_silver_searcher",
-      "shellcheck", "yamllint",
+      "shellcheck", "yamllint", "neovim",
       "vale-bin", "hadolint-bin", "terraform-lsp-bin", "ripgrep"
       ]
 
