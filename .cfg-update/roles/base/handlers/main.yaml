@@ -1,0 +1,11 @@
+- name: logind-restart
+  systemd:
+    name: systemd-logind
+    state: restarted
+  become: True
+
+- name: autofs-restart
+  systemd:
+    name: autofs
+    state: restarted
+  become: True

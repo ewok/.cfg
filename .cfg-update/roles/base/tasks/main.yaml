@@ -1,0 +1,145 @@
+---
+
+- name: Add some repos to pacman
+  blockinfile:
+    path: /etc/pacman.conf
+    block: |
+      [chaotic-aur]
+      Server = http://lonewolf-builder.duckdns.org/$repo/x86_64
+      Server = http://chaotic.bangl.de/$repo/x86_64
+      Server = https://repo.kitsuna.net/x86_64
+  become: True
+
+- name: Add key 1 to pacman
+  pacman_key:
+    id: 3056513887B78AEB
+    keyserver: hkp://keyserver.ubuntu.com
+    state: present
+  become: True
+
+- name: Add key 1 to pacman
+  pacman_key:
+    id: 8A9E14A07010F7E3
+    keyserver: hkp://keyserver.ubuntu.com
+    state: present
+  become: True
+
+- name: Update pacman cache
+  pacman:
+    update_cache: yes
+    upgrade: yes
+  become: True
+
+- name: Remove some default manjaro packages
+  pacman:
+    name:
+        - vim
+        - nautilus
+        - insync-nautilus
+        - python-nautilus
+        - tracker-miners
+        - tracker
+        - upower
+        - podman
+    state: absent
+  become: True
+
+- name: Install packages via pacman
+  pacman:
+    name:
+      - base-devel
+      - gcc
+      - rclone
+      - sshuttle
+      - autofs
+    state: present
+  become: True
+
+- name: Install packages via aur
+  aur:
+    name: "{{ item }}"
+    use: yay
+  loop: [
+      "tmux", "python2", "python3",
+      "python-virtualenv", "unzip", "p7zip",
+      "zsh-autosuggestions", "restic", "trash-cli",
+      "nvme-cli", "par", "sshfs", "curlftpfs",
+      "rbenv", "ruby-build", "moc", "jq", "pyenv",
+      "pyenv-virtualenv", "npm", "blacklist_pcspkr",
+      "gotty", "docker", "vifm", "python-ueberzug",
+      "unzip", "fzf", "reptyr", "cabextract", "dfc",
+      "gnu-netcat", "smem", "fish", "task-spooler",
+      "starship-bin"
+      ]
+
+- name: Add some repos via git
+  git:
+    repo: "{{ item.repo }}"
+    dest: "{{ item.dest }}"
+  loop:
+      - { repo: "https://github.com/tmux-plugins/tmux-resurrect", dest: "~/.tmux/resurrect" }
+      - { repo: "git://github.com/robbyrussell/oh-my-zsh.git", dest: "~/.oh-my-zsh" }
+
+- file:
+    path: "~/.local/bin"
+    state: directory
+
+- name: Install AppImage
+  get_url:
+    url: "https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage"
+    dest: "~/.local/bin/appimagetool"
+    mode: 0755
+
+- name: Config powermanagement
+  lineinfile:
+    path: /etc/systemd/logind.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  become: True
+  notify: logind-restart
+  loop:
+    - { regexp: "^HandlePowerKey=", line: "HandlePowerKey=ignore" }
+    - { regexp: "HandleSuspendKey=", line: "HandleSuspendKey=suspend" }
+    - { regexp: "HandleHibernateKey=", line: "HandleHibernateKey=ignore" }
+    - { regexp: "HandleLidSwitch=", line: "HandleLidSwitch=suspend" }
+    - { regexp: "HandleLidSwitchExternalPower=", line: "HandleLidSwitchExternalPower=ignore" }
+    - { regexp: "HandleLidSwitchDocked=", line: "HandleLidSwitchDocked=ignore" }
+
+- name: adding existing user "{{ ansible_user }}" to some groups
+  user:
+     name: "{{ ansible_user }}"
+     groups: wheel,docker,rfkill
+     append: yes
+  become: True
+
+- name: Add some sudoers configs
+  copy:
+    src: "{{ item }}"
+    dest: /etc/sudoers.d
+    validate: /usr/sbin/visudo -csf %s
+  with_fileglob:
+    - files/sudoers.d/*
+  become: True
+
+- name: Configure autofs
+  copy:
+    src: "{{ item }}"
+    dest: /etc/autofs
+  notify: autofs-restart
+  with_fileglob:
+    - files/autofs/*
+  become: True
+
+- git_config:
+    name: "{{ item.name }}"
+    scope: global
+    value: "{{ item.value }}"
+  loop:
+      - {  name: "alias.ignore", value: "!gi() { curl -sL https://www.gitignore.io/api/$@ ;}; gi" }
+      - {  name: "core.excludesfile", value: "~/.gitexcludes" }
+      - {  name: "credential.helper", value: "/usr/share/git/credential/gnome-keyring/git-credential-gnome-keyring" }
+
+- shell: cd /usr/share/git/credential/gnome-keyring && make
+  changed_when: False
+  become: True
+  changed_when: False

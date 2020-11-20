@@ -1,0 +1,11 @@
+---
+
+- name: Install packages via aur
+  aur:
+    name: "{{ item }}"
+    use: yay
+  loop: [
+      "mbsync", "msmtp", "neomutt", "notmuch", "notmuch-mutt",
+      "davmail", "goobook", "lbdb", "vcal", "pass",
+      "pandoc"
+      ]

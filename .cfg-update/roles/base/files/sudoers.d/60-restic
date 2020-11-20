@@ -1,0 +1,4 @@
+Cmnd_Alias     RESTIC = /usr/bin/restic
+
+%wheel ALL = NOPASSWD:SETENV: RESTIC
+

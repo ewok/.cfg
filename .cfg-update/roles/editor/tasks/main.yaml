@@ -1,0 +1,50 @@
+---
+
+- name: Install packages via aur
+  aur:
+    name: "{{ item }}"
+    use: yay
+  loop: [
+      "ctags", "global", "the_silver_searcher",
+      "shellcheck", "yamllint",
+      "vale-bin", "hadolint-bin", "terraform-lsp-bin", "ripgrep"
+      ]
+
+- name: Install packages via npm
+  npm:
+    name: "{{ item }}"
+    global: True
+  loop:
+    - markdownlint-cli
+    - bash-language-server
+    - livedown
+  become: True
+
+- name: Install packages via pip
+  pip:
+    name:
+      - neovim
+      - pynvim
+      - msgpack
+    virtualenv: "{{ item.path }}"
+    virtualenv_python: "{{ item.python }}"
+  loop:
+    - { python: "python2", path: "~/share/venv/neovim2" }
+    - { python: "python3", path: "~/share/venv/neovim3" }
+
+- name: Ensure ~/.local/bin exists
+  file:
+    path: "~/.local/bin"
+    state: directory
+
+- name: Install nvim
+  get_url:
+    url: "https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage"
+    dest: "~/.local/bin/nvim"
+    mode: 0755
+  ignore_errors: True
+
+- name: Install nvim plugins
+  shell: nvim +PackUpdate +qall
+  changed_when: False
+  ignore_errors: True

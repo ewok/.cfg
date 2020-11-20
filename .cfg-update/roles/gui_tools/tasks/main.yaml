@@ -1,0 +1,55 @@
+---
+
+- lineinfile:
+    path: /etc/X11/xorg.conf.d/00-keyboard.conf
+    regexp: '^.*Option "XkbLayout" .*'
+    line: '        Option "XkbLayout" "us,ru"'
+  become: True
+
+- name: Remove some default manjaro packages
+  pacman:
+    name:
+        - manjaro-i3-settings
+        - i3-gaps
+        - palemoon-bin
+        - xfce4-power-manager
+        - xst
+        - dunst
+        - xkb-switch
+    state: absent
+  become: True
+
+- name: Install packages via pacman
+  pacman:
+    name: "{{ item }}"
+    state: present
+  become: True
+  loop: [
+        "termite", "nerd-fonts-noto-sans-mono", "scrot", "libgnome-keyring", "seahorse",
+        "xclip", "xsel", "autorandr", "timeshift", "ttf-liberation",
+        "xorg-xbacklight", "manjaro-pulse", "pa-applet", "pavucontrol", "pulseaudio-bluetooth",
+        "blueman", "zathura", "zathura-cb", "zathura-djvu", "zathura-pdf-mupdf",
+        "flameshot", "slack-desktop", "telegram-desktop", "meld",
+        "masterpdfeditor-free", "firefox", "albert", "muparser","inotify-tools",
+        "xdotool", "xorg-xwininfo", "calibre", "fbreader",
+        "libappindicator-gtk3", "i3-wm", "trayer", "autokey", "i3exit", "xcape"
+        ]
+
+- name: Install packages via aur
+  aur:
+    name: [
+         "cawbird", "cryptomator", "ldoce5viewer-pyqt5-git", "grive-git", "zeal",
+         "enpass-bin", "gpmdp", "siji-git", "ttf-unifont", "redshift-gtk-git",
+         "deadd-notification-center-bin", "playerctl", "sparkleshare", "typora",
+          "xkb-switch-i3-git"
+        ]
+    use: yay
+
+- file:
+    path: "{{ item }}"
+    mode: '0755'
+    state: directory
+  loop:
+    - "~/.local/share/albert/org.albert.extension.python/modules/"
+    - "~/.config/albert"
+    - "~/Pictures/Screenshots"

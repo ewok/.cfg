@@ -1,0 +1,27 @@
+---
+
+- name: Install packages via aur
+  aur:
+    name: [
+        "cups", "xsane", "system-config-printer", "ghostscript",
+        ]
+    use: yay
+
+- name: Install printer drivers
+  git:
+    repo: "{{ item.repo }}"
+    dest: "{{ item.dest }}"
+  loop:
+      - { repo: "https://github.com/ondrej-zary/carps-cups.git", dest: "/tmp/carps-cups" }
+  become: True
+
+- name: Build printer drivers
+  shell: |
+    cd /tmp/carps-cups;
+    make && make install;
+  become: True
+
+- systemd:
+    name: cups-browsed
+    state: started
+    enabled: True
