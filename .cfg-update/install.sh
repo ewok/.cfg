@@ -14,5 +14,6 @@ fi
 source .venv/bin/activate
 pip install ansible
 
-TAGS=${1:-"pre,base,editor"}
-ansible-playbook install.yaml -D -K -t "$TAGS"
+TAGS=${1:-pre,base,editor}
+
+ansible-playbook install.yaml -D -K -t $TAGS
