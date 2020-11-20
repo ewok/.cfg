@@ -5,7 +5,10 @@ set -e
 if [ "$(whoami)" == "root" ]
 then
     pacman -Sy --noconfirm
-    pacman -S --needed --noconfirm git sudo
+    pacman -S --needed --noconfirm git sudo curl
+
+    mkdir -p /etc/sudoers.d
+    echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/10-installer
 
     read -p 'Future used user: ' instuser
     if id -u "$instuser" >/dev/null 2>&1; then
@@ -13,12 +16,14 @@ then
     else
         useradd -m $instuser
         passwd $instuser
+
+        echo 'alias update-config=bash $HOME/.cfg-update/init.sh' >> /home/$instuser/.bashrc
     fi
 
-    mkdir -p /etc/sudoers.d
-    echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/10-installer
     usermod -aG wheel $instuser
+
     echo "Now switch to your user(sudo -u $instuser bash)";
+    echo "and type 'update-config'"
     exit 1;
 fi
 
