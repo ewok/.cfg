@@ -4,3 +4,6 @@
     state: started
     enabled: True
   become: True
+
+- name: nitrogen-restore
+  shell: nitrogen --restore

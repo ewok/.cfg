@@ -70,7 +70,7 @@
       "gotty", "docker", "vifm", "python-ueberzug",
       "unzip", "fzf", "reptyr", "cabextract", "dfc",
       "gnu-netcat", "smem", "fish", "task-spooler",
-      "starship-bin"
+      "starship-bin", "rslsync"
       ]
 
 - name: Add some repos via git
