@@ -62,7 +62,6 @@ if status is-interactive
   abbr -a egrep "egrep --color=always"
   abbr -a j jrnl
   abbr -a c config
-  abbr -a cls config ls-tree --name-only HEAD
 
   bind \cw backward-kill-word
 

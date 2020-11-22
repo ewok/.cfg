@@ -10,9 +10,9 @@ function git
     LANGUAGE=en_US.UTF-8 command git $argv
 end
 
-function config --wraps git
- LANGUAGE=en_US.UTF-8 command git --git-dir=$HOME/.cfg/ --work-tree=$HOME $argv
-end
+# function config --wraps git
+#  LANGUAGE=en_US.UTF-8 command git --git-dir=$HOME/.cfg/ --work-tree=$HOME $argv
+# end
 
 # Probably should be tested
 #if contains darwin $OSTYPE
