@@ -60,6 +60,7 @@ nnoremap <f10> :q<cr>
 nnoremap <c-s> /
 nnoremap <m-i> :sync<cr>
 nnoremap <c-w>f :sync %c<cr><down>
+nnoremap <silent> <m-o> :sync %c<cr><down>
 nnoremap <m-?> :find<space>
 
 " Selecting like in MC
@@ -73,7 +74,8 @@ nnoremap <c-j> :!if [ -n "$TMUX" ]; tmux select-pane -D;end<cr>
 nnoremap <c-k> :!if [ -n "$TMUX" ]; tmux select-pane -U;end<cr>
 nnoremap <c-l> :!if [ -n "$TMUX" ]; tmux select-pane -R;end<cr>
 
-nnoremap i :vim<cr>
+nnoremap i :vim +LoadSessionCurrent<cr>
+nnoremap io :vim +LoadSessionCurrent<cr>
 nnoremap ii :vim %f<cr>
 nnoremap it :!if [ -n "$TMUX" ]; tmux new-window vim %f;end<CR>
 nnoremap is :!if [ -n "$TMUX" ]; tmux split-window -v -p 80 vim %f;end<CR>
