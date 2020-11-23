@@ -7,11 +7,8 @@ if [ $# -gt 2 ];then
   exit 1
 fi
 
-NAME="debug-busybox"
+NAME="debug-jmxterm"
 test "$1" != "" && NAME="$1"
-
-RUN="sh"
-test "$2" != "" && RUN="$2"
 
 if ! which kubectl &>/dev/null;then
   echo "kubectl not found, please run the command below:"
@@ -19,6 +16,6 @@ if ! which kubectl &>/dev/null;then
   CMD="echo"
 fi
 
-$CMD kubectl run $NAME --image=busybox -it --rm --restart='Never' -- $RUN
+$CMD kubectl run $NAME --image=ewok/jmxterm -it --rm --restart='Never'
 sleep 1
 $CMD kubectl get po | grep $NAME && echo "ERROR: Pod was not deleted!"

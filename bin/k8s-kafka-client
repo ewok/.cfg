@@ -7,7 +7,7 @@ if [ $# -gt 1 ];then
   exit 1
 fi
 
-NAME="debug"
+NAME="debug-kafka-client"
 test "$1" != "" && NAME="$1"
 
 if ! which kubectl &>/dev/null;then

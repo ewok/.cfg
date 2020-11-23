@@ -4,4 +4,4 @@ set -e
 
 export RESTIC_PASSWORD="$(pass backup)"
 
-backup-home clean "" rclone:nas:/BackupsEnc/workstations/$(hostname -s | tr '[:upper:]' '[:lower:]')
+$HOME/bin/backup-home clean "" rclone:nas:/BackupsEnc/workstations/$(hostname -s | tr '[:upper:]' '[:lower:]')
