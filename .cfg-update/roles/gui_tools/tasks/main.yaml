@@ -56,7 +56,7 @@
 
 - name: Set wallpaper from unsplash
   get_url:
-    url: "https://unsplash.com/photos/0n70cnyOFgc/download?force=true"
+    url: "https://unsplash.com/photos/aL7SA1ASVdQ/download?force=true"
     dest: "/usr/share/backgrounds/unsplash.jpg"
     mode: 0644
     force: True
