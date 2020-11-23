@@ -344,7 +344,6 @@ nmap <leader>yp :r ~/.vbuf<CR>
 " }}}
 " Some vim tunings {{{
 nnoremap Y y$
-nnoremap vv V
 
 " Don't yank to default register when changing something
 nnoremap c "xc
