@@ -26,13 +26,13 @@
   become: True
   loop: [
         "termite", "nerd-fonts-noto-sans-mono", "scrot", "libgnome-keyring", "seahorse",
-        "xclip", "xsel", "autorandr", "timeshift", "ttf-liberation",
+        "xclip", "xsel", "autorandr", "ttf-liberation",
         "xorg-xbacklight", "manjaro-pulse", "pa-applet", "pavucontrol", "pulseaudio-bluetooth",
         "blueman", "zathura", "zathura-cb", "zathura-djvu", "zathura-pdf-mupdf",
         "flameshot", "slack-desktop", "telegram-desktop", "meld",
         "masterpdfeditor-free", "firefox", "albert", "muparser","inotify-tools",
         "xdotool", "xorg-xwininfo", "calibre", "fbreader",
-        "libappindicator-gtk3", "i3-wm", "trayer", "autokey", "i3exit", "xcape"
+        "libappindicator-gtk3", "i3-wm", "trayer", "autokey", "i3exit", "xcape", "ttf-fira-code"
         ]
 
 - name: Install packages via aur

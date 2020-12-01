@@ -65,6 +65,20 @@ if status is-interactive
 
   bind \cw backward-kill-word
 
+  if test -e '/home/ataranchiev/.nix-profile/etc/profile.d/nix.sh'
+    set -x NIX_PATH $NIX_PATH $HOME/.nix-defexpr/channels
+    bax source '/home/ataranchiev/.nix-profile/etc/profile.d/nix.sh'
+  end
+end
+
+function preexec --on-event fish_preexec
+  if status is-interactive
+    if not string length -q "$STY"; and not string length -q "$TMUX"
+        echo $DISPLAY > ~/.display.tmp
+    else
+        export DISPLAY=(cat ~/.display.tmp)
+    end
+  end
 end
 
 # SSH-AGENT

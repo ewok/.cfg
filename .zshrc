@@ -75,3 +75,4 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 if [ -f ~/.zshrc.local ];then
     source ~/.zshrc.local
 fi
+if [ -e /home/ataranchiev/.nix-profile/etc/profile.d/nix.sh ]; then . /home/ataranchiev/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

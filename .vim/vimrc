@@ -47,7 +47,7 @@ set softtabstop=4
 set splitbelow
 set splitright
 set switchbuf=useopen
-set synmaxcol=120
+set synmaxcol=1000
 set tabstop=4
 set timeoutlen=500
 set title
@@ -232,8 +232,14 @@ let g:lmap.z = { 'name': '+Zoom' }
 
 " Helpers {{{
 " minpac
-if ! isdirectory($HOME . '/.vim/pack/minpac/opt/minpac/')
-  execute "!git clone https://github.com/k-takata/minpac.git ~/.vim/pack/minpac/opt/minpac"
+if has('nvim')
+  let g:config_path = '.config/nvim'
+else
+  let g:config_path = '.vim'
+endif
+
+if ! isdirectory($HOME . '/' . g:config_path . '/pack/minpac/opt/minpac/')
+  execute "!git clone https://github.com/k-takata/minpac.git " . $HOME . "/" . g:config_path . "/pack/minpac/opt/minpac"
 endif
 
 packadd minpac
@@ -383,6 +389,11 @@ augroup ft_ansible
 
   au FileType yaml.ansible call LoadAnsibleFT()
   function! LoadAnsibleFT()
+
+    if exists('b:ansible_ft')
+      return
+    endif
+
     setlocal commentstring=#\ %s
 
     PackAdd ale
@@ -409,6 +420,8 @@ augroup ft_ansible
     let g:ansible_normal_keywords_highlight = 'Constant'
     let g:ansible_with_keywords_highlight = 'Constant'
 
+    let b:ansible_ft = 1
+
   endfunction
 
 augroup END
@@ -421,7 +434,15 @@ augroup ft_csv
 
   au FileType csv call LoadCSVFT()
   function! LoadCSVFT()
+
+    if exists('b:csv_ft')
+      return
+    endif
+
     PackAdd csv 1
+
+    let b:csv_ft = 1
+
   endfunction
 
 augroup END
@@ -433,12 +454,18 @@ augroup ft_yaml
   au FileType yaml call LoadYamlFT()
   function! LoadYamlFT()
 
+    if exists('b:yaml_ft')
+      return
+    endif
+
     PackAdd ale
     let b:ale_yaml_yamllint_executable = 'yamllint_custom'
     let b:ale_linters = ['yamllint']
 
     PackAdd speeddating
     PackAdd rooter
+
+    let b:yaml_ft = 1
 
   endfunction
 
@@ -464,6 +491,10 @@ augroup ft_go
 
   au FileType go call LoadGoFT()
   function! LoadGoFT()
+
+    if exists('b:go_ft')
+      return
+    endif
 
     PackAdd vim-go 1
 
@@ -500,6 +531,8 @@ augroup ft_go
 
     PackAdd rooter
 
+    let b:go_ft = 1
+
   endfunction
 
 augroup END
@@ -512,7 +545,15 @@ augroup ft_jrnl
 
   au FileType jrnl call LoadJrnlFT()
   function! LoadJrnlFT()
+
+    if exists('b:jrnl_ft')
+      return
+    endif
+
     PackAdd jrnl 1
+
+    let b:jrnl_ft = 1
+
   endfunction
 augroup END
 " }}}
@@ -536,11 +577,17 @@ augroup ft_logstash
   au FileType logstash call LoadLogstashFT()
   function! LoadLogstashFT()
 
+    if exists('b:logstash_ft')
+      return
+    endif
+
     PackAdd logstash 1
 
     setlocal foldmethod=marker
     setlocal foldmarker={,}
     setlocal wrap
+
+    let b:logstash_ft = 1
 
   endfunction
 
@@ -554,6 +601,11 @@ augroup ft_markdown
 
   au FileType markdown call LoadMarkdownFT()
   function! LoadMarkdownFT()
+
+    if exists('b:markdown_ft')
+      return
+    endif
+
     setlocal foldlevel=2
     setlocal conceallevel=2
 
@@ -567,6 +619,8 @@ augroup ft_markdown
 
     nmap <buffer> <silent> <leader>oT :silent ! typora "%" &<CR>
 
+    iab \c ```
+
     PackAdd medieval
     let g:medieval_langs = ['python=python3', 'ruby', 'sh', 'console=bash', 'bash', 'perl']
 
@@ -578,6 +632,8 @@ augroup ft_markdown
 
     PackAdd speeddating
     PackAdd rooter
+
+    let b:markdown_ft = 1
 
   endfunction
 
@@ -591,10 +647,42 @@ augroup ft_mustache
   au FileType mustache call LoadMustacheFT()
   function! LoadMustacheFT()
 
+    if exists('b:mustache_ft')
+      return
+    endif
+
     PackAdd mustache 1
     let g:mustache_abbreviations = 1
 
     PackAdd rooter
+
+    let b:mustache_ft = 1
+
+  endfunction
+
+augroup END
+" }}}
+" Nix {{{
+call minpac#add('LnL7/vim-nix', {'type': 'opt', 'name': 'nix'})
+augroup ft_nix
+  au!
+  au BufRead,BufNewFile *.nix set filetype=nix
+
+  au FileType nix call LoadNixFT()
+  function! LoadNixFT()
+
+    if exists('b:nix_ft')
+      return
+    endif
+
+    imap <buffer> <C-Enter> <ESC>A;<Enter>
+
+    PackAdd ale
+    PackAdd rooter
+
+    PackAdd nix 1
+
+    let b:nix_ft = 1
 
   endfunction
 
@@ -609,6 +697,10 @@ augroup ft_python
 
   au FileType python call LoadPythonFT()
   function! LoadPythonFT()
+
+    if exists('b:python_ft')
+      return
+    endif
 
     PackAdd jedi
     let g:jedi#goto_command = ""
@@ -661,6 +753,8 @@ augroup ft_python
     PackAdd textobj-python
     PackAdd rooter
 
+    let b:python_ft = 1
+
   endfunction
 
 augroup END
@@ -673,6 +767,10 @@ augroup ft_puppet
   au BufNewFile,BufRead *.pp set filetype=puppet
   au FileType puppet call LoadPuppetFT()
   function! LoadPuppetFT()
+
+    if exists('b:puppet_ft')
+      return
+    endif
 
     setlocal commentstring=#\ %s
 
@@ -687,6 +785,8 @@ augroup ft_puppet
 
     PackAdd rooter
 
+    let b:puppet_ft = 1
+
   endfunction
 
 augroup END
@@ -699,6 +799,10 @@ augroup ft_rust
 
   au FileType rust call LoadRustFT()
   function! LoadRustFT()
+
+    if exists('b:rust_ft')
+      return
+    endif
 
     PackAdd rust 1
     PackAdd rust-racer
@@ -714,6 +818,8 @@ augroup ft_rust
 
     PackAdd rooter
 
+    let b:rust_ft = 1
+
   endfunction
 
 augroup END
@@ -726,6 +832,10 @@ augroup ft_todo
 
   au FileType todo call LoadTODOFT()
   function! LoadTODOFT()
+
+    if exists('b:todo_ft')
+      return
+    endif
 
     hi TASK guifg=Yellow ctermfg=Yellow term=Bold
     syn match TASK "\s\w\{1,10}-\d\{1,6}[ :]"
@@ -759,6 +869,8 @@ augroup ft_todo
 
     PackAdd speeddating
 
+    let b:todo_ft = 1
+
   endfunction
 
 augroup END
@@ -773,6 +885,10 @@ augroup ft_vim
   au FileType vim call LoadVimFT()
   function! LoadVimFT()
 
+    if exists('b:vim_ft')
+      return
+    endif
+
     let g:lmap.r.S = 'Source-line'
     setlocal foldmethod=marker keywordprg=:help
     setlocal commentstring=\"\ %s
@@ -783,6 +899,8 @@ augroup ft_vim
     nmap <buffer> <leader>rr :source %<CR>:echon "script reloaded!"<CR>
     vnoremap <buffer> <leader>rS y:@"<CR>
     nnoremap <buffer> <leader>rS ^vg_y:execute @@<cr>:echo 'Sourced line.'<cr>
+
+    let b:vim_ft = 1
 
   endfunction
 
@@ -801,12 +919,18 @@ augroup ft_sh
   au FileType sh call LoadShFT()
   function! LoadShFT()
 
+    if exists('b:shell_ft')
+      return
+    endif
+
     nmap <buffer> <leader>rr :w\|call RunCmd("bash " . bufname("%"))<CR>
 
     PackAdd ale
     let b:ale_linters = ['shellcheck', 'language_server']
 
     PackAdd speeddating
+
+    let b:shell_ft = 1
 
   endfunction
 
@@ -819,16 +943,13 @@ augroup ft_vimwiki
   au FileType vimwiki call LoadVimWikiFT()
   function! LoadVimWikiFT()
 
-    setlocal foldlevel=2
+    if exists('b:vimwiki_ft')
+      return
+    endif
 
-    PackAdd ale
-    let b:ale_linters = ['vale', 'markdownlint']
+    call LoadMarkdownFT()
 
-    PackAdd medieval
-    let g:medieval_langs = ['python=python3', 'ruby', 'sh', 'console=bash', 'bash', 'perl']
-
-    PackAdd speeddating
-    PackAdd rooter
+    let b:vimwiki_ft = 1
 
   endfunction
 
@@ -841,8 +962,14 @@ augroup ft_dockerfile
   au FileType dockerfile call LoadDockerfileFT()
   function! LoadDockerfileFT()
 
+    if exists('b:docker_ft')
+      return
+    endif
+
     PackAdd ale
     let b:ale_linters = ['hadolint']
+
+    let b:docker_ft = 1
 
   endfunction
 
@@ -854,6 +981,10 @@ augroup ft_mail
   au FileType mail call LoadMailFT()
 
   function! LoadMailFT()
+
+    if exists('b:mail_ft')
+      return
+    endif
 
     map <buffer> <leader>ry :%!pandoc -f markdown_mmd -t html<CR>
 
@@ -867,6 +998,8 @@ augroup ft_mail
     nmap <buffer> <silent> <leader>rk :LivedownKill<CR>
 
     PackAdd speeddating
+
+    let b:mail_ft = 1
 
   endfunction
 
@@ -886,11 +1019,17 @@ augroup ft_helm
   au FileType helm call LoadHelmFT()
   function! LoadHelmFT()
 
+    if exists('b:helm_ft')
+      return
+    endif
+
     PackAdd helm 1
 
     nmap <buffer> <silent> <leader>rr :call RenderHelm()<CR>
 
     PackAdd rooter
+
+    let b:helm_ft = 1
 
   endfunction
 
@@ -904,7 +1043,15 @@ augroup ft_log
 
   au FileType log call LoadLogFT()
   function! LoadLogFT()
+
+    if exists('b:log_ft')
+      return
+    endif
+
     PackAdd log 1
+
+    let b:log_ft = 1
+
   endfunction
 
 augroup END
@@ -916,6 +1063,10 @@ augroup ft_terraform
 
   au FileType terraform call LoadTerraformFT()
   function! LoadTerraformFT()
+
+    if exists('b:terraform_ft')
+      return
+    endif
 
     PackAdd terraform 1
     let g:terraform_align=1
@@ -932,6 +1083,8 @@ augroup ft_terraform
 
     PackAdd rooter
 
+    let b:terraform_ft = 1
+
   endfunction
 
 augroup END
@@ -943,6 +1096,10 @@ augroup ft_lua
   au FileType lua call LoadLUAFT()
   function! LoadLUAFT()
 
+    if exists('b:lua_ft')
+      return
+    endif
+
     PackAdd ale
     call ale#linter#Define('lua', {
           \   'name': 'lua-language-server',
@@ -951,6 +1108,9 @@ augroup ft_lua
           \   'command': '%e',
           \   'project_root': getcwd(),
           \})
+
+    let b:lua_ft = 1
+
   endfunction
 
 augroup END
@@ -962,7 +1122,15 @@ augroup ft_xml
 
   au FileType xml call LoadXMLFT()
   function! LoadXMLFT()
+
+    if exists('b:xml_ft')
+      return
+    endif
+
     PackAdd xml 1
+
+    let b:xml_ft = 1
+
   endfunction
 
 augroup END
@@ -1039,6 +1207,7 @@ if !has('gui_running')
 endif
 
 let g:lightline = {
+      \ 'enable': { 'tabline': 0 },
       \ 'colorscheme': 'neodark',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
@@ -1050,6 +1219,8 @@ let g:lightline = {
       \   'venv': 'virtualenv#statusline'
       \ },
       \ }
+
+let g:lightline.enable.tabline = 0
 
 " }}}
 " Marks {{{
@@ -1270,9 +1441,9 @@ nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
 vnoremap <silent> <localleader> :<c-u>WhichKeyVisual ','<CR>
 " }}}
 " Xkb {{{
-call minpac#add('lyokha/vim-xkbswitch', {'type': 'start', 'name': 'xkbswitch'})
-let g:XkbSwitchEnabled = 1
-let g:XkbSwitchSkipFt = [ 'nerdtree' ]
+" call minpac#add('lyokha/vim-xkbswitch', {'type': 'start', 'name': 'xkbswitch'})
+" let g:XkbSwitchEnabled = 1
+" let g:XkbSwitchSkipFt = [ 'nerdtree' ]
 " }}}
 " Zoom {{{
 call minpac#add('dhruvasagar/vim-zoom', {'type': 'start', 'name': 'vim-zoom'})
@@ -1304,6 +1475,31 @@ function! ZoomToggle()
     unlet zoom_tag
   endif
 endfunction
+" }}}
+" Buffers {{{
+call minpac#add('bagrat/vim-buffet', {'type': 'opt', 'name': 'buffet'})
+let g:buffet_powerline_separators = 1
+" let g:buffet_tab_icon = "\uf00a"
+" let g:buffet_left_trunc_icon = "\uf0a8"
+" let g:buffet_right_trunc_icon = "\uf0a9"
+function! g:BuffetSetCustomColors()
+  hi! BuffetCurrentBuffer cterm=NONE ctermfg=179 ctermbg=59 guifg=#D4B261 guibg=#49505e
+  hi! BuffetActiveBuffer cterm=NONE ctermfg=245 ctermbg=59 guifg=#6b7589 guibg=#49505e
+  hi! BuffetBuffer cterm=NONE ctermfg=245 ctermbg=237 guifg=#6b7589 guibg=#35383f
+  " hi! BuffetModCurrentBuffer cterm=NONE	ctermfg=179 ctermbg=245 guifg=#49505e guibg=#6b7589
+  " hi! BuffetModActiveBuffer cterm=NONE	ctermfg=245 ctermbg=245 guifg=#49505e guibg=#6b7589
+  " hi! BuffetModBuffer cterm=NONE	ctermfg=59 ctermbg=245 guifg=#49505e guibg=#6b7589
+  hi! BuffetTrunc cterm=NONE ctermfg=245 ctermbg=59 guifg=#6b7589 guibg=#49505e
+  hi! BuffetTab cterm=NONE ctermfg=236 ctermbg=74 guifg=#282c34 guibg=#639EE4
+endfunction
+
+PackAdd buffet
+
+noremap <Tab> :bn<CR>
+noremap <S-Tab> :bp<CR>
+noremap <Leader><Tab> :Bw<CR>
+noremap <Leader><S-Tab> :Bw!<CR>
+
 " }}}
 " }}}
 
@@ -1732,7 +1928,7 @@ set foldtext=MyFoldText()
 " Trigger autoread when changing buffers or coming back to vim.
 " au FocusGained,BufEnter,WinEnter * :silent! !
 
-au! FileType vim,python,golang,go,yaml.ansible,puppet,json,sh,vimwiki,rust,yaml call DefaultOn()
+au! FileType vim,python,golang,go,yaml.ansible,puppet,json,sh,vimwiki,rust,yaml,nix call DefaultOn()
 
 function! DefaultOn()
   if !exists("b:auto_save")

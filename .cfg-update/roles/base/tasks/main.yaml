@@ -78,7 +78,6 @@
     repo: "{{ item.repo }}"
     dest: "{{ item.dest }}"
   loop:
-      - { repo: "https://github.com/tmux-plugins/tmux-resurrect", dest: "~/.tmux/resurrect" }
       - { repo: "git://github.com/robbyrussell/oh-my-zsh.git", dest: "~/.oh-my-zsh" }
 
 - file:

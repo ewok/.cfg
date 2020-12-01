@@ -43,7 +43,7 @@ for_window [title="Enpass Assistant"] floating enable", move position mouse
 for_window [class="GParted"] floating enable border normal, move position center
 for_window [class="Insync"] floating enable, move position center
 for_window [class="(?i)System-config-printer.py"] floating enable border normal
-for_window [class="(?i)virtualbox"] floating enable border normal, move position center
+# for_window [class="(?i)virtualbox"] floating enable border normal, move position center
 for_window [class="Manjaro Settings Manager"] floating enable border normal, move position center
 for_window [class="Nitrogen"] floating enable sticky enable border normal
 for_window [class="Pamac-manager"] floating enable, move position center
@@ -150,23 +150,20 @@ bindsym --release F12 exec --no-startup-id kill -s USR1 $(pidof deadd-notificati
 
 # Start Applications
 bindsym $mod_a+o mode "$mode_apps"
-set $mode_apps  (l)ldoce, (s)slack, (b)rowser, (m)ixer, (p)avu, (z)eal, (t)ticktick, (d)telegram, (w)twitter
+set $mode_apps  (l)ldoce, (s)slack, (b)rowser, (p)avu, (t)ticktick, (d)telegram, (e)xplorer
 mode "$mode_apps" {
         bindsym b exec firefox, mode "default"
         bindsym d exec telegram-desktop, mode "default"
         bindsym l exec ldoce5viewer, mode "default"
-        bindsym m exec termite -e 'alsamixer', mode "default"
+        bindsym e exec pcmanfm, mode "default"
         bindsym p exec pavucontrol, mode "default"
         bindsym s exec slack, mode "default"
         bindsym t exec ticktick, mode "default"
-        bindsym w exec cawbird, mode "default"
-        bindsym z exec zeal, mode "default"
 
         # exit resize mode: Enter or Escape
         bindsym Return mode "default"
         bindsym Escape mode "default"
         bindsym Ctrl+m mode "default"
-        bindsym Ctrl+[ mode "default"
 }
 #
 # bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"

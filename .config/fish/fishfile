@@ -5,3 +5,4 @@ acomagu/fish-async-prompt
 jethrokuan/fzf
 evanlucas/fish-kubectl-completions
 # DrPhil/kubectl-fish-abbr
+jorgebucaran/bax.fish
