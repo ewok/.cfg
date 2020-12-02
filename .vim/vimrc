@@ -283,6 +283,9 @@ command! -nargs=* PackAdd call PackAddId(<f-args>)
 " Tabs {{{
 " map gr gT
 nnoremap <C-W>t :tabnew<CR>
+noremap <Tab> :tabnext<CR>
+noremap <S-Tab> :tabprev<CR>
+
 
 " }}}
 " Windows {{{
@@ -313,6 +316,9 @@ if bufwinnr(1)
   map <C-W><C-H> :vertical resize -6<CR>
   map <C-W><BS> :vertical resize -6<CR>
 endif
+
+" don't close last window
+nmap <silent><C-W>q :close<CR>
 
 " }}}
 " Folding {{{
@@ -464,6 +470,7 @@ augroup ft_yaml
 
     PackAdd speeddating
     PackAdd rooter
+    PackAdd splitjoin
 
     let b:yaml_ft = 1
 
@@ -530,6 +537,8 @@ augroup ft_go
     nmap <buffer> <Leader>rdi <Plug>(go-info)
 
     PackAdd rooter
+
+    PackAdd splitjoin
 
     let b:go_ft = 1
 
@@ -655,6 +664,7 @@ augroup ft_mustache
     let g:mustache_abbreviations = 1
 
     PackAdd rooter
+    PackAdd splitjoin
 
     let b:mustache_ft = 1
 
@@ -752,6 +762,7 @@ augroup ft_python
 
     PackAdd textobj-python
     PackAdd rooter
+    PackAdd splitjoin
 
     let b:python_ft = 1
 
@@ -817,6 +828,7 @@ augroup ft_rust
     nmap <buffer> <silent> <leader>rf :RustFmt<CR>
 
     PackAdd rooter
+    PackAdd splitjoin
 
     let b:rust_ft = 1
 
@@ -832,10 +844,6 @@ augroup ft_todo
 
   au FileType todo call LoadTODOFT()
   function! LoadTODOFT()
-
-    if exists('b:todo_ft')
-      return
-    endif
 
     hi TASK guifg=Yellow ctermfg=Yellow term=Bold
     syn match TASK "\s\w\{1,10}-\d\{1,6}[ :]"
@@ -869,8 +877,6 @@ augroup ft_todo
 
     PackAdd speeddating
 
-    let b:todo_ft = 1
-
   endfunction
 
 augroup END
@@ -899,6 +905,8 @@ augroup ft_vim
     nmap <buffer> <leader>rr :source %<CR>:echon "script reloaded!"<CR>
     vnoremap <buffer> <leader>rS y:@"<CR>
     nnoremap <buffer> <leader>rS ^vg_y:execute @@<cr>:echo 'Sourced line.'<cr>
+
+    PackAdd splitjoin
 
     let b:vim_ft = 1
 
@@ -929,6 +937,7 @@ augroup ft_sh
     let b:ale_linters = ['shellcheck', 'language_server']
 
     PackAdd speeddating
+    PackAdd splitjoin
 
     let b:shell_ft = 1
 
@@ -1109,6 +1118,8 @@ augroup ft_lua
           \   'project_root': getcwd(),
           \})
 
+    PackAdd splitjoin
+
     let b:lua_ft = 1
 
   endfunction
@@ -1207,7 +1218,7 @@ if !has('gui_running')
 endif
 
 let g:lightline = {
-      \ 'enable': { 'tabline': 0 },
+      \ 'enable': { 'tabline': 1 },
       \ 'colorscheme': 'neodark',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
@@ -1294,7 +1305,7 @@ let NERDTreeMapJumpPrevSibling=''
 let g:NERDTreeMapMenu='M'
 
 " Close vim if the only NERDTree window left
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " }}}
 " Rooter {{{
 call minpac#add('airblade/vim-rooter', {'type': 'opt', 'name': 'rooter'})
@@ -1477,28 +1488,10 @@ function! ZoomToggle()
 endfunction
 " }}}
 " Buffers {{{
-call minpac#add('bagrat/vim-buffet', {'type': 'opt', 'name': 'buffet'})
-let g:buffet_powerline_separators = 1
-" let g:buffet_tab_icon = "\uf00a"
-" let g:buffet_left_trunc_icon = "\uf0a8"
-" let g:buffet_right_trunc_icon = "\uf0a9"
-function! g:BuffetSetCustomColors()
-  hi! BuffetCurrentBuffer cterm=NONE ctermfg=179 ctermbg=59 guifg=#D4B261 guibg=#49505e
-  hi! BuffetActiveBuffer cterm=NONE ctermfg=245 ctermbg=59 guifg=#6b7589 guibg=#49505e
-  hi! BuffetBuffer cterm=NONE ctermfg=245 ctermbg=237 guifg=#6b7589 guibg=#35383f
-  " hi! BuffetModCurrentBuffer cterm=NONE	ctermfg=179 ctermbg=245 guifg=#49505e guibg=#6b7589
-  " hi! BuffetModActiveBuffer cterm=NONE	ctermfg=245 ctermbg=245 guifg=#49505e guibg=#6b7589
-  " hi! BuffetModBuffer cterm=NONE	ctermfg=59 ctermbg=245 guifg=#49505e guibg=#6b7589
-  hi! BuffetTrunc cterm=NONE ctermfg=245 ctermbg=59 guifg=#6b7589 guibg=#49505e
-  hi! BuffetTab cterm=NONE ctermfg=236 ctermbg=74 guifg=#282c34 guibg=#639EE4
-endfunction
+call minpac#add('schickling/vim-bufonly', {'type': 'start', 'name': 'bufonly'})
 
-PackAdd buffet
-
-noremap <Tab> :bn<CR>
-noremap <S-Tab> :bp<CR>
-noremap <Leader><Tab> :Bw<CR>
-noremap <Leader><S-Tab> :Bw!<CR>
+nmap <silent><C-W>Q :Bonly<CR>
+nmap <silent><C-W>C :Bonly<CR>
 
 " }}}
 " }}}
@@ -1652,6 +1645,12 @@ let g:surround_{char2nr("d")} = "<div\1id: \r..*\r id=\"&\"\1>\r</div>"
 let g:surround_{char2nr("x")} = "<\1id: \r..*\r&\1>\r</\1\1>"
 
 let g:surround_{char2nr("%")} = "{% \r %}"
+
+" }}}
+" Split/Join {{{
+call minpac#add('andrewradev/splitjoin.vim', {'type': 'opt', 'name': 'splitjoin'})
+let g:splitjoin_split_mapping = 'gs'
+let g:splitjoin_join_mapping  = 'gj'
 
 " }}}
 " }}}
