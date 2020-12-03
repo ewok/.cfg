@@ -1,6 +1,6 @@
 " vim: ts=2 sts=2 sw=2
 " Basic options {{{
-set shell=/bin/bash
+set shell=bash
 let g:mapleader = "\<Space>"
 let g:maplocalleader = ","
 
@@ -678,6 +678,18 @@ augroup ft_nix
   au!
   au BufRead,BufNewFile *.nix set filetype=nix
 
+  function NixFTSmartCR()
+    let line = getline('.')
+    if line =~# ';$'
+      execute "normal o\<Space>\<BS>\<Esc>"
+      startinsert!
+      else
+      call setline('.', line . ';')
+      normal l
+      startinsert
+    endif
+  endfunction
+
   au FileType nix call LoadNixFT()
   function! LoadNixFT()
 
@@ -685,7 +697,7 @@ augroup ft_nix
       return
     endif
 
-    imap <buffer> <C-Enter> <ESC>A;<Enter>
+    imap <buffer> <C-Enter> <ESC>:call NixFTSmartCR()<CR>
 
     PackAdd ale
     PackAdd rooter
