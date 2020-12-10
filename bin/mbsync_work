@@ -10,12 +10,13 @@ then
 fi
 
 ping -q -w1 -c1 google.com &>/dev/null || exit 1
+ERROR=0
 
 if [ "$(pgrep mbsync)" == "" ]
 then
     USERNAME=$(cat ~/.mutt_work)
     sed -e "s/%USERNAME%/$USERNAME/" ~/.mbsyncrc > /tmp/.mbsyncrc
-    mbsync -c /tmp/.mbsyncrc "$@" || echo Errors processing email
+    mbsync -c /tmp/.mbsyncrc "$@" || ERROR=$?
     rm -f /tmp/.mbsyncrc
 
     notmuch new
@@ -27,3 +28,6 @@ if [ "$(pgrep -f '/bin/java -jar /usr/share/java/davmail/davmail.jar')" != "" ]
 then
     pkill -f '/bin/java -jar /usr/share/java/davmail/davmail.jar'
 fi
+
+if [ $ERROR -ne 0 ]; then notify-send -u critical "Error processing email";fi
+exit $ERROR

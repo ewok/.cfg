@@ -19,6 +19,6 @@ if ! which kubectl &>/dev/null;then
   CMD="echo"
 fi
 
-$CMD kubectl run $NAME --image=busybox -it --rm --restart='Never' -- $RUN
+$CMD kubectl run $NAME --image=busybox:1.31 -it --rm --restart='Never' -- $RUN
 sleep 1
 $CMD kubectl get po | grep $NAME && echo "ERROR: Pod was not deleted!"

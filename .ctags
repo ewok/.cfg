@@ -52,6 +52,11 @@
 --regex-markdown=/^#####[ \t]+(.*)/\1/k,Heading_L5/
 --regex-markdown=/^######[ \t]+(.*)/\1/k,Heading_L6/
 
+
+--langdef=NIX
+--langmap=NIX:.nix
+--regex-NIX=/([^ \t*]*)[ \t]*=.*:/\1/f/
+
 --exclude=.git
 --exclude=.svn
 --exclude=.hg

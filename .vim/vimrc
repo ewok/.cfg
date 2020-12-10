@@ -678,6 +678,13 @@ augroup ft_nix
   au!
   au BufRead,BufNewFile *.nix set filetype=nix
 
+  let g:tagbar_type_nix = {
+      \ 'ctagstype': 'nix',
+      \ 'kinds' : [
+          \'f:function'
+      \]
+  \}
+
   function NixFTSmartCR()
     let line = getline('.')
     if line =~# ';$'
@@ -698,6 +705,7 @@ augroup ft_nix
     endif
 
     imap <buffer> <C-Enter> <ESC>:call NixFTSmartCR()<CR>
+
 
     PackAdd ale
     PackAdd rooter
@@ -1249,10 +1257,35 @@ let g:lightline.enable.tabline = 0
 " Marks {{{
 call minpac#add('kshenoy/vim-signature', {'type': 'start', 'name': 'marks'})
 
+let g:SignatureMap = {
+  \ 'Leader'             :  "m",
+  \ 'PlaceNextMark'      :  "",
+  \ 'ToggleMarkAtLine'   :  "mm",
+  \ 'PurgeMarksAtLine'   :  "m-",
+  \ 'DeleteMark'         :  "",
+  \ 'PurgeMarks'         :  "",
+  \ 'PurgeMarkers'       :  "m<BS>",
+  \ 'GotoNextLineAlpha'  :  "",
+  \ 'GotoPrevLineAlpha'  :  "",
+  \ 'GotoNextSpotAlpha'  :  "",
+  \ 'GotoPrevSpotAlpha'  :  "",
+  \ 'GotoNextLineByPos'  :  "]'",
+  \ 'GotoPrevLineByPos'  :  "['",
+  \ 'GotoNextSpotByPos'  :  "",
+  \ 'GotoPrevSpotByPos'  :  "",
+  \ 'GotoNextMarker'     :  "",
+  \ 'GotoPrevMarker'     :  "",
+  \ 'GotoNextMarkerAny'  :  "",
+  \ 'GotoPrevMarkerAny'  :  "",
+  \ 'ListBufferMarks'    :  "m/",
+  \ 'ListBufferMarkers'  :  ""
+  \ }
+
+nnoremap m/ :call MarksOnList()<CR>
 nnoremap <leader>mm :call MarksOnList()<CR>
 function! MarksOnList()
-  call signature#mark#List(0)
   call signature#sign#Refresh(1)
+  call signature#mark#List(0)
   nnoremap <buffer> q :x<CR>
 endfunction
 
@@ -1262,6 +1295,7 @@ function! MarksPurgeGlobaly()
   call signature#mark#Purge('all')
   call signature#marker#Purge()
   call signature#mark#List(0)
+  call signature#sign#Refresh(1)
   wincmd q
   wshada!
 endfunction
@@ -1323,6 +1357,11 @@ let g:NERDTreeMapMenu='M'
 call minpac#add('airblade/vim-rooter', {'type': 'opt', 'name': 'rooter'})
 let g:rooter_silent_chdir = 1
 let g:rooter_resolve_links = 1
+" }}}
+" Tagbar {{{
+call minpac#add('preservim/tagbar', {'type': 'start', 'name': 'tagbar'})
+noremap <leader>tb :TagbarToggle<CR>
+noremap <leader>pt :TagbarToggle<CR>
 " }}}
 " Texting {{{
 call minpac#add('junegunn/goyo.vim', {'type': 'opt', 'name': 'goyo'})
